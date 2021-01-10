@@ -121,8 +121,7 @@ public class SysUserController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:user:add')")
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@Validated @RequestBody SysUser user)
-    {
+    public AjaxResult add(@Validated @RequestBody SysUser user) {
         if (UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user.getUserName())))
         {
             return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，登录账号已存在");

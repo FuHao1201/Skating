@@ -28,10 +28,10 @@
       <!--用户数据-->
       <el-col :span="20" :xs="24">
         <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="用户名称" prop="userName">
+          <el-form-item label="登录名称" prop="userName">
             <el-input
               v-model="queryParams.userName"
-              placeholder="请输入用户名称"
+              placeholder="请输入登录名称"
               clearable
               size="small"
               style="width: 240px"
@@ -136,8 +136,8 @@
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="用户编号" align="center" prop="userId" />
-          <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true" />
-          <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true" />
+          <el-table-column label="登录名称" align="center" prop="userName" :show-overflow-tooltip="true" />
+          <el-table-column label="用户姓名" align="center" prop="nickName" :show-overflow-tooltip="true" />
           <el-table-column label="部门" align="center" prop="dept.deptName" :show-overflow-tooltip="true" />
           <el-table-column label="手机号码" align="center" prop="phonenumber" width="120" />
           <el-table-column label="状态" align="center">
@@ -203,8 +203,8 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="用户昵称" prop="nickName">
-              <el-input v-model="form.nickName" placeholder="请输入用户昵称" />
+            <el-form-item label="用户姓名" prop="nickName">
+              <el-input v-model="form.nickName" placeholder="请输入用户姓名" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -227,13 +227,13 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="用户名称" prop="userName">
-              <el-input v-model="form.userName" placeholder="请输入用户名称" />
+            <el-form-item v-if="form.userId == undefined" label="登录名称" prop="userName">
+              <el-input v-model="form.userName" placeholder="请输入登录名称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="用户密码" prop="password">
-              <el-input v-model="form.password" placeholder="请输入用户密码" type="password" />
+            <el-form-item v-if="form.userId == undefined" label="登录密码" prop="password">
+              <el-input v-model="form.password" placeholder="请输入登录密码" type="password" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -263,19 +263,6 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="岗位">
-              <el-select v-model="form.postIds" multiple placeholder="请选择">
-                <el-option
-                  v-for="item in postOptions"
-                  :key="item.postId"
-                  :label="item.postName"
-                  :value="item.postId"
-                  :disabled="item.status == 1"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
           <el-col :span="12">
             <el-form-item label="角色">
               <el-select v-model="form.roleIds" multiple placeholder="请选择">
@@ -379,8 +366,6 @@ export default {
       statusOptions: [],
       // 性别状态字典
       sexOptions: [],
-      // 岗位选项
-      postOptions: [],
       // 角色选项
       roleOptions: [],
       // 表单参数
@@ -416,13 +401,13 @@ export default {
       // 表单校验
       rules: {
         userName: [
-          { required: true, message: "用户名称不能为空", trigger: "blur" }
+          { required: true, message: "登录名称不能为空", trigger: "blur" }
         ],
         nickName: [
-          { required: true, message: "用户昵称不能为空", trigger: "blur" }
+          { required: true, message: "用户姓名不能为空", trigger: "blur" }
         ],
         password: [
-          { required: true, message: "用户密码不能为空", trigger: "blur" }
+          { required: true, message: "登录密码不能为空", trigger: "blur" }
         ],
         email: [
           {
@@ -547,7 +532,6 @@ export default {
       this.reset();
       this.getTreeselect();
       getUser().then(response => {
-        this.postOptions = response.posts;
         this.roleOptions = response.roles;
         this.open = true;
         this.title = "添加用户";
@@ -561,7 +545,6 @@ export default {
       const userId = row.userId || this.ids;
       getUser(userId).then(response => {
         this.form = response.data;
-        this.postOptions = response.posts;
         this.roleOptions = response.roles;
         this.form.postIds = response.postIds;
         this.form.roleIds = response.roleIds;
